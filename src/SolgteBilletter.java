@@ -2,59 +2,64 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class SolgteBilletter {
-    private ArrayList<BilletDør> BDListe;
-    private ArrayList<BilletForsalg10Dag> BForsalgListe;
-    private ArrayList<BilletForsalgStudRabat> BForsalgStudRabat;
-    private ArrayList<Integer> studentIDRepo;
+
+    private ArrayList<BilletForsalgStudRabat> studentIDRepo;
+    private ArrayList<Billet> solgteBill;
 
     public SolgteBilletter() {
-        BDListe = new ArrayList<>();
-        BForsalgListe = new ArrayList<>();
-        BForsalgStudRabat = new ArrayList<>();
+
         studentIDRepo = new ArrayList<>();
+        solgteBill = new ArrayList<>();
     }
 
-    public void addTicketDoor(BilletDør b) {
-        BDListe.add(b);
+    public void addTicketsToList(Billet b) {
+        solgteBill.add(b);
     }
-    public void addTicketForsalg(BilletForsalg10Dag b) {
-        BForsalgListe.add(b);
-    }
-    public void addTicketForsalgStudRabat(BilletForsalgStudRabat b) {
-        BForsalgStudRabat.add(b);
-    }
+
+
     public int countNumOfTicketsDoor() {
-        return BDListe.size();
+        int count = 0;
+        for(Billet b : solgteBill) {
+            if (b instanceof BilletDør) {
+                count++;
+            }
+        }
+        return count;
     }
     public int countNumOfTicketsForsalg() {
-        return BForsalgListe.size();
+        int count = 0;
+        for(Billet b : solgteBill) {
+            if (b instanceof BilletForsalg10Dag) {
+                count++;
+            }
+        }
+        return count;
     }
     public int countNumOfTicketsStudRabat() {
-        return BForsalgStudRabat.size();
-    }
-    public String collectAndPrintAllStudentIDs() {
-        String result = "";
-        int count = 1;
-
-        for (BilletForsalgStudRabat b : BForsalgStudRabat) {
-            studentIDRepo.add(b.getStudieKortID());
+        int count = 0;
+        for(Billet b : solgteBill) {
+            if (b instanceof BilletForsalgStudRabat) {
+                count++;
+            }
         }
-        Collections.sort(studentIDRepo, new StudentIDComparator2());
-        for(Integer b : studentIDRepo) {
-            result += count+". "+b+"\n";
-            count++;
-        }
-        return result;
+        return count;
     }
     public String collectAndPrintAllStudentIDS2() {
         String result ="";
         int count = 1;
 
-        BForsalgStudRabat.sort(new studentIDComparator());
-        for(BilletForsalgStudRabat b : BForsalgStudRabat) {
-            result += "\n"+count+". Student ID: "+ b.getStudieKortID()+"\t\tName: "+b.getName();
+        for(Billet b : solgteBill) {
+            if(b instanceof BilletForsalgStudRabat studRab) {
+                studentIDRepo.add(studRab);
+            }
+        }
+        studentIDRepo.sort(new StudentIDComparator2());
+        for(BilletForsalgStudRabat b : studentIDRepo) {
+            result += "\n"+count+". Student ID: "+b.getStudieKortID()+"\t\tName: "+b.getName();
             count++;
         }
+
+
         return result;
     }
 
@@ -63,16 +68,25 @@ public class SolgteBilletter {
         int count = 1;
         String result = "";
         result += "Tickets sold by door: \n";
-        for(BilletDør b : BDListe) {
-            result += "\n"+b.toString();
+
+        for(Billet b : solgteBill) {
+            if(b instanceof BilletDør billetDør) {
+                billetDør.toString();
+            }
         }
         result += "Tickets sold, preshow, 10 days before event: \n";
-        for(BilletForsalg10Dag b : BForsalgListe) {
-            result += "\n"+b.toString();
+
+        for(Billet b : solgteBill) {
+            if(b instanceof BilletForsalg10Dag forSalg) {
+                result += forSalg.toString();
+            }
         }
         result += "Tickets sold, preshow, student discount: \n";
-        for(BilletForsalgStudRabat b :BForsalgStudRabat) {
-            result += "\n"+b.toString();
+
+        for(Billet b : solgteBill) {
+            if (b instanceof BilletForsalgStudRabat studRabat) {
+                result += "\n"+studRabat.toString();
+            }
         }
 
         return result;

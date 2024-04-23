@@ -53,7 +53,7 @@ public class BilletForsalgStudRabat implements Billet{
         int dageRabatIndtrædelse = 10;
         double regPris = 90;
         double discountedResult = regPris*discount;
-        if(dageFørKøb <= dageRabatIndtrædelse) {
+        if(dageFørKøb > dageRabatIndtrædelse) {
             setPris(regPris);
         } else {
             setPris(discountedResult);
